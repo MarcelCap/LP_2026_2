@@ -1,0 +1,6 @@
+comandos terminal ghci:
+ghci -> para entrar no terminal
+:quit -> p sair do terminal
+:load [nome_do_arquivo].hs -> arquivo a ser compilado
+(dps d compilar o arquivo)
+[function] [input] -> função chamada e entrada da função
