@@ -2,6 +2,23 @@
 -- This module demonstrates fundamental Haskell concepts including
 -- pattern matching, recursion, and higher-order functions.
 
+
+-- ============================================================================
+-- Basic types
+-- ============================================================================
+-- Integers:
+--  1, 2, 3, ... :: Int
+--  +, *, -, div, mod :: Int -> Int -> Int
+--  >, >=, ==, /=, <=, < :: Int -> Int -> Bool
+--  Int: fixed lenght per implementation (8/16 bytes)
+--  Integer: arbitrary lenght
+
+-- Booleans:
+--  True, Fase :: Bool
+--  &&, || :: Bool -> Bool -> Bool
+--  not :: Bool -> Bool
+
+
 -- | Returns the square of an integer.
 --
 -- >>> square 5
@@ -159,10 +176,13 @@ myOr True _ = True
 
 -- | Counts how many weeks (0 to n) had sales equal to a target value s.
 --
--- >>> salesEqual 5 3
--- (depends on sales function)
+-- >>> salesEqual 7 3
+-- 1
+-- >>> salesEqual 3 7
+-- 0
+
 salesEqual :: Int -> Int -> Int
-salesEqual s n
-    | n == 0 = if isEqual s (sales 0) then 1 else 0
-    | isEqual s (sales n) = 1 + salesEqual s (n - 1)
-    | otherwise = salesEqual s (n - 1)
+salesEqual s 0  | isEqual s (sales 0) = 1
+                | otherwise = 0
+salesEqual s n  | n > 0 && isEqual s (sales n) = 1 + salesEqual s (n - 1)
+                | n > 0 = salesEqual s (n - 1)
