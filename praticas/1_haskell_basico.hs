@@ -220,7 +220,7 @@ salesEqual s n  | n > 0 && isEqual s (sales n) = 1 + salesEqual s (n - 1)
 -- 97
 -- >>> ord '0'
 -- 48
-ord :: Char -> Int
+-- ord :: Char -> Int
 
 
 -- | Converts an integer code point back to its character.
@@ -234,7 +234,7 @@ ord :: Char -> Int
 -- 'a'
 -- >>> chr 32
 -- ' '
-chr :: Int -> Char
+-- chr :: Int -> Char
 
 
 -- | Concatenates two strings.
@@ -245,7 +245,7 @@ chr :: Int -> Char
 -- "abcdef"
 -- >>> "Hello" ++ " " ++ "World"
 -- "Hello World"
-(++) :: String -> String -> String
+-- (++) :: String -> String -> String
 
 
 -- | Returns the next character in Unicode order.
@@ -335,3 +335,96 @@ makeSpaces a = " " ++ makeSpaces (a - 1)
 -- "     x"
 pushRight :: Int -> String -> String
 pushRight n s = makeSpaces n ++ s
+
+
+-- ============================================================================
+-- Floating Point Numbers
+-- ============================================================================
+-- Haskell provides two types for decimal numbers:
+--
+--   - Float: single precision (32 bits), less accurate but faster
+--   - Double: double precision (64 bits), more accurate (default)
+--
+-- Examples:
+--   - 22.3435 :: Float
+--   - 3.14159 :: Double
+--   - pi :: Floating a => a (works with Float or Double)
+--
+-- Arithmetic operations work with both types:
+--   - (+), (-), (*), (/) :: Floating a => a -> a -> a
+--
+-- Key difference: Floating-point operations can have rounding errors.
+-- For precise calculations (finance, etc.), consider using Rational or Decimal types.
+
+
+-- | Rounds a floating-point number upward to the nearest integer.
+--
+-- Always rounds toward positive infinity. Returns an Int.
+--
+-- >>> ceiling 6.3
+-- 7
+-- >>> ceiling 6.0
+-- 6
+-- >>> ceiling (-2.5)
+-- -2
+-- ceiling :: Float -> Int
+
+
+-- | Rounds a floating-point number downward to the nearest integer.
+--
+-- Always rounds toward negative infinity. Returns an Int.
+--
+-- >>> floor 5.7
+-- 5
+-- >>> floor 5.0
+-- 5
+-- >>> floor (-2.5)
+-- -3
+-- floor :: Float -> Int
+
+
+-- | Rounds a floating-point number to the nearest integer.
+--
+-- Uses "round half to even" strategy: when exactly between two integers
+-- (e.g., 6.5), rounds to the nearest even integer.
+--
+-- >>> round 6.5
+-- 6
+-- >>> round 6.8
+-- 7
+-- >>> round 3.3
+-- 3
+-- >>> round 2.5
+-- 2
+-- round :: Float -> Int
+
+
+-- | Converts an integer to a floating-point number.
+--
+-- Bridges the gap between Int and Float/Double types. Useful when mixing
+-- integer and floating-point operations (e.g., division).
+--
+-- >>> fromIntegral 5
+-- 5.0
+-- >>> fromIntegral 0
+-- 0.0
+-- >>> fromIntegral (-3)
+-- -3.0
+-- fromIntegral :: Int -> Float
+
+
+-- | Calculates the average sales value from week 0 to week n.
+--
+-- Divides the total sales by the number of weeks (n+1, since we start
+-- counting from 0). Uses fromIntegral to convert integers to floats for
+-- accurate division.
+--
+-- Requires: totalSales function to be defined.
+--
+-- >>> averageSales 5
+-- 3.0
+-- >>> averageSales 0
+-- 0.0
+averageSales :: Int -> Float
+averageSales 0 = fromIntegral (sales 0)
+averageSales n = fromIntegral (totalSales n) / fromIntegral n
