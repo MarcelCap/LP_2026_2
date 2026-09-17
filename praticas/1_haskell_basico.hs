@@ -2,6 +2,7 @@
 -- This module demonstrates fundamental Haskell concepts including
 -- pattern matching, recursion, and higher-order functions.
 
+import Data.Char
 
 -- ============================================================================
 -- Basic types
@@ -186,3 +187,151 @@ salesEqual s 0  | isEqual s (sales 0) = 1
                 | otherwise = 0
 salesEqual s n  | n > 0 && isEqual s (sales n) = 1 + salesEqual s (n - 1)
                 | n > 0 = salesEqual s (n - 1)
+
+
+-- ============================================================================
+-- Characters and Strings
+-- ============================================================================
+-- Haskell distinguishes between:
+--   - Char: a single character, e.g. 'a', '1', '\n'
+--   - String: a sequence of characters, e.g. "hello", ""
+--
+-- Special escape sequences:
+--   - '\t' = tab
+--   - '\n' = newline
+--   - '\\' = backslash
+--   - '\'' = single quote
+--   - '\"' = double quote
+--
+-- Important: ' ', "", and " " are all different!
+--   - ' ' is a space character (type Char)
+--   - "" is an empty string (type String)
+--   - " " is a string containing one space
+
+
+-- | Converts a character to its Unicode code point.
+--
+-- Each character is represented internally by an integer. The ord function
+-- retrieves this numeric value (used in ASCII/Unicode encoding).
+--
+-- >>> ord 'A'
+-- 65
+-- >>> ord 'a'
+-- 97
+-- >>> ord '0'
+-- 48
+ord :: Char -> Int
+
+
+-- | Converts an integer code point back to its character.
+--
+-- The inverse of ord. Given a valid Unicode code point, returns the
+-- corresponding character.
+--
+-- >>> chr 65
+-- 'A'
+-- >>> chr 97
+-- 'a'
+-- >>> chr 32
+-- ' '
+chr :: Int -> Char
+
+
+-- | Concatenates two strings.
+--
+-- Joins two strings end-to-end into a single string.
+--
+-- >>> "abc" ++ "def"
+-- "abcdef"
+-- >>> "Hello" ++ " " ++ "World"
+-- "Hello World"
+(++) :: String -> String -> String
+
+
+-- | Returns the next character in Unicode order.
+--
+-- Increments a character by one position in the character encoding.
+-- Useful for generating sequences of characters.
+--
+-- >>> nextChar 'A'
+-- 'B'
+-- >>> nextChar '9'
+-- ':'
+-- >>> nextChar 'z'
+-- '{'
+nextChar :: Char -> Char
+nextChar c = chr (ord c + 1)
+
+
+-- | Offset between uppercase and lowercase letters in Unicode.
+--
+-- The difference in code points between 'A' (65) and 'a' (97) is 32.
+-- This constant is used to convert between cases.
+--
+-- >>> offset
+-- 32
+offset :: Int
+offset = ord 'A' - ord 'a'
+
+
+-- | Converts a lowercase letter to its uppercase equivalent.
+--
+-- Uses the offset between ASCII uppercase and lowercase codes to perform
+-- the conversion. Only works correctly for lowercase Latin letters.
+--
+-- >>> capitalize 'a'
+-- 'A'
+-- >>> capitalize 'm'
+-- 'M'
+-- >>> capitalize 'z'
+-- 'Z'
+capitalize :: Char -> Char
+capitalize ch = chr (ord ch + offset)
+
+
+-- | Checks if a character is a decimal digit ('0' through '9').
+--
+-- Returns True only for characters in the range [0-9], False otherwise.
+-- This is a custom implementation; Data.Char.isDigit is the standard library
+-- alternative.
+--
+-- >>> isDigit '5'
+-- True
+-- >>> isDigit 'a'
+-- False
+-- >>> isDigit '0'
+-- True
+isDigit :: Char -> Bool
+isDigit c = (c >= '0') && (c <= '9')
+
+
+-- | Generates a string of n spaces.
+--
+-- Uses recursion with pattern matching to build a string of the given length.
+-- Base case: 0 spaces returns empty string. Recursive case: subtract 1 from n
+-- and prepend one space.
+--
+-- >>> makeSpaces 3
+-- "   "
+-- >>> makeSpaces 0
+-- ""
+-- >>> length (makeSpaces 5)
+-- 5
+makeSpaces :: Int -> String
+makeSpaces 0 = ""
+makeSpaces a = " " ++ makeSpaces (a - 1)
+
+
+-- | Pads a string with leading spaces (right-aligns text).
+--
+-- Prepends n spaces to a string, shifting it rightward. Useful for
+-- formatting columns or creating indentation.
+--
+-- >>> pushRight 3 "hi"
+-- "   hi"
+-- >>> pushRight 0 "test"
+-- "test"
+-- >>> pushRight 5 "x"
+-- "     x"
+pushRight :: Int -> String -> String
+pushRight n s = makeSpaces n ++ s
