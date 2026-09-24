@@ -721,3 +721,55 @@ maxThreeOccurs m n p = (mx, eqCount)
   where
     mx = maxiThree m n p
     eqCount = equalCount mx m n p
+
+
+-- | Calculates the value of 'x' if there is only one root
+-- in a second degree equation
+-- 
+-- >>> 1.0 (-4.0) 4.0
+-- 2.0
+-- >>> 0.0 (-4.0) 4.0
+-- Infinity
+oneRoot :: Float -> Float -> Float -> Float
+oneRoot a b _ = -b/(2.0*a)
+
+-- | Calcuates de value of 'x' in a second degree equation
+-- with two roots
+-- 
+-- >>> 1.0 (-4.0) 4.0
+-- (2.0,2.0)
+-- >>> 1.0 (-5.0) 6.0
+-- (2.0,3.0)
+-- >>> 0.0 (-4.0) 4.0
+-- (Infinity,Infinity)
+twoRoots :: Float -> Float -> Float -> (Float, Float)
+twoRoots a b c = (d-e, d+e)
+    where
+        d = -b/(2.0*a)
+        e = sqrt (b^2 - 4.0*a*c)/2.0*a
+
+-- | Calcuates de value of 'x' in a second degree equation
+-- 
+-- Recieves a, b, c in the equation: a*x² + b*x + c = 0
+-- Returns the value of the roots in the equation
+-- 
+-- This is an exercise where it's aplicated most of the knoledge
+-- above.
+-- 
+-- >>> 1.0 (-5.0) 6.0
+-- "2.0 3.0"
+-- >>> 1.0 (-4.0) 4.0
+-- "2.0"
+-- >>> 1.0 (-2.0) 5.0
+-- "no roots"
+-- >>> 0.0 3.0 0.0
+-- "Error: a must be /= 0 (a/=0)"
+roots :: Float -> Float -> Float -> String
+roots a b c
+    | a == 0 = "Error: a must be /= 0 (a/=0)"
+    | del == 0 = show (oneRoot a b c)
+    | del > 0 = show f ++ " " ++ show s
+    | otherwise = "no roots"
+        where 
+            del = b^2 - 4.0*a*c
+            (f, s) = twoRoots a b c
