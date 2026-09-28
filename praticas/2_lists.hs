@@ -302,3 +302,27 @@ returnLoan [] _ _ = []
 returnLoan ((p,b):pbs) per boo
         | (p,b) == (per,boo) = pbs
         | otherwise = (p,b): returnLoan pbs per boo
+
+-- ===============================================================
+-- List compression
+-- ===============================================================
+-- Used to define lists using other lists. Some example below:
+
+-- | Doubles a list of integers
+doubleList :: [Int] -> [Int]
+doubleList xs = [2*a | a <- xs]
+
+
+-- | Returns a list with the sum of each pair
+sumPairs' :: [(Int,Int)] -> [Int]
+sumPairs' lp = [a+b|(a,b) <- lp]
+
+-- | Returns only the digits from a string
+digits' :: String -> String
+digits' st = [ch | ch<-st, isDigit ch]
+
+-- | Checks if a number is in a list
+member' :: [Int] -> Int -> Bool
+member' [] _ = False
+member' (a:as) y = (a==y) || member' as y
+
