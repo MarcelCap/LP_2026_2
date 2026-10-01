@@ -326,3 +326,21 @@ member' :: [Int] -> Int -> Bool
 member' [] _ = False
 member' (a:as) y = (a==y) || member' as y
 
+
+-- | Returns a list of books
+books2 :: Database -> Person -> [Book]
+books2 db p = [book | (person, book) <- db, person == p]
+
+
+-- | Returns a list of people
+borrowers2 :: Database -> Book -> [Person]
+borrowers2 db b = [person | (person, book) <- db, book==b]
+
+
+-- | Checks if the book is borrowed
+borrowed2 :: Database -> Book -> Bool
+borrowed2 db b = not $ null [book | (_, book) <- db, book==b]
+
+-- | Erases a loan from the database, if exists
+returnLoan2 :: Database -> Person -> Book -> Database
+returnLoan2 db p b = [e | e <- db, e /= (p,b)]
